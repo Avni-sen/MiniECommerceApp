@@ -1,4 +1,5 @@
 using ETicaretAPI.Persistance;
+using ETicaretAPI.Persistance.Contexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
