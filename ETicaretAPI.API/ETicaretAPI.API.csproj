@@ -19,8 +19,4 @@
     <ProjectReference Include="..\ETicaretAPI.Persistance\ETicaretAPI.Persistance.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

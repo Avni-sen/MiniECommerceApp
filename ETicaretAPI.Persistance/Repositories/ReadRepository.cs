@@ -16,11 +16,44 @@ namespace ETicaretAPI.Persistance.Repositories
         }
 
         public DbSet<T> Table => _context.Set<T>();
+        public IQueryable<T> Find(Expression<Func<T, bool>> filter, bool tracking = true)
+        {
+            var query = Table.Where(filter);
 
-        public IQueryable<T> Find(Expression<Func<T, bool>> filter) => Table.Where(filter);
-        public IQueryable<T> GetAll() => Table;
+            if (!tracking)
+                query = query.AsNoTracking();
 
-        public async Task<T> GetByIdAsync(string id) => await Table.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
-        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> filter) => await Table.FirstOrDefaultAsync(filter);
+            return query;
+        }
+
+        public IQueryable<T> GetAll(bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+
+            if (!tracking)
+                query = query.AsNoTracking();
+
+            return query;
+        }
+        public async Task<T> GetByIdAsync(string id, bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+
+            if (!tracking)
+                query = Table.AsNoTracking();
+
+            return await query.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
+        }
+
+        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> filter, bool tracking = true)
+        {
+            var query = Table.AsQueryable();
+
+            if (!tracking)
+                query = Table.AsNoTracking();
+
+            return await query.FirstOrDefaultAsync(filter); ;
+        }
+
     }
 }
