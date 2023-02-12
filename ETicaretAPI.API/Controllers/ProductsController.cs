@@ -11,28 +11,29 @@ namespace ETicaretAPI.API.Controllers
         readonly private IProductWriteRepository _productWriteRepository;
         readonly private IProductReadRepository _productReadRepository;
 
-        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository)
+        readonly private IOrderReadRepository _orderReadRepository;
+        readonly private IOrderWriteRepository _orderWriteRepository;
+
+        readonly private ICustomerReadRepository _customerReadRepository;
+        readonly private ICustomerWriteRepository _customerWriteRepository;
+
+        public ProductsController(IProductWriteRepository productWriteRepository, IProductReadRepository productReadRepository, IOrderReadRepository orderReadRepository, IOrderWriteRepository orderWriteRepository, ICustomerReadRepository customerReadRepository, ICustomerWriteRepository customerWriteRepository)
         {
             _productWriteRepository = productWriteRepository;
             _productReadRepository = productReadRepository;
+            _orderReadRepository = orderReadRepository;
+            _orderWriteRepository = orderWriteRepository;
+            _customerReadRepository = customerReadRepository;
+            _customerWriteRepository = customerWriteRepository;
         }
-
 
         [HttpGet]
         public async Task Get()
         {
-            //await _productWriteRepository.AddRangeAsync(new()
-            //{
-            //    new() {Id =Guid.NewGuid(), CreatedDate= DateTime.Now , Name="Product1", Price=300,Stock=20,Status=true,IsDeleted=false },
-            //    new() {Id =Guid.NewGuid(), CreatedDate= DateTime.Now , Name="Product2", Price=200,Stock=20,Status=true,IsDeleted=false },
-            //    new() {Id =Guid.NewGuid(), CreatedDate= DateTime.Now , Name="Product3", Price=500,Stock=20,Status=true,IsDeleted=false },
-            //});
+            Order order = await _orderReadRepository.GetByIdAsync("2567F7A8-80C1-4D3A-F908-08DB0CEE3014");
+            order.Address = "İstanbul/Üsküdar";
+            await _orderWriteRepository.SaveAsync();
 
-            //await _productWriteRepository.SaveAsync();
-
-            Product p = await _productReadRepository.GetByIdAsync("FC358AC6-E31D-4129-A4D9-83080E576AA4",false);
-            p.Name = "Product1";
-            await _productWriteRepository.SaveAsync();
         }
     }
 }
